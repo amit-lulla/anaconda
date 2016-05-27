@@ -1,4 +1,4 @@
-//Package anaconda provides structs and functions for accessing version 1.1
+//Package twitterapi provides structs and functions for accessing version 1.1
 //of the Twitter API.
 //
 //Successful API queries return native Go structs that can be used immediately,
@@ -8,9 +8,9 @@
 //
 //If you already have the access token (and secret) for your user (Twitter provides this for your own account on the developer portal), creating the client is simple:
 //
-//  anaconda.SetConsumerKey("your-consumer-key")
-//  anaconda.SetConsumerSecret("your-consumer-secret")
-//  api := anaconda.NewTwitterApi("your-access-token", "your-access-token-secret")
+//  twitterapi.SetConsumerKey("your-consumer-key")
+//  twitterapi.SetConsumerSecret("your-consumer-secret")
+//  api := twitterapi.NewTwitterApi("your-access-token", "your-access-token-secret")
 //
 //
 //Queries
@@ -31,13 +31,13 @@
 //
 //Endpoints
 //
-//Anaconda implements most of the endpoints defined in the Twitter API documentation: https://dev.twitter.com/docs/api/1.1.
+//twitterapi implements most of the endpoints defined in the Twitter API documentation: https://dev.twitter.com/docs/api/1.1.
 //For clarity, in most cases, the function name is simply the name of the HTTP method and the endpoint (e.g., the endpoint `GET /friendships/incoming` is provided by the function `GetFriendshipsIncoming`).
 //
 //In a few cases, a shortened form has been chosen to make life easier (for example, retweeting is simply the function `Retweet`)
 //
 //More detailed information about the behavior of each particular endpoint can be found at the official Twitter API documentation.
-package anaconda
+package twitterapi
 
 import (
 	"encoding/json"
@@ -45,8 +45,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"time"
 	"strings"
+	"time"
 
 	"github.com/ChimeraCoder/tokenbucket"
 	"github.com/garyburd/go-oauth/oauth"

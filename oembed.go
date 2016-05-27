@@ -1,4 +1,4 @@
-package anaconda
+package twitterapi
 
 import (
 	"net/http"

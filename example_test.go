@@ -1,26 +1,26 @@
-package anaconda_test
+package twitterapi_test
 
 import (
 	"fmt"
 	"time"
 
-	"github.com/ChimeraCoder/anaconda"
+	"github.com/amit-lulla/twitterapi"
 )
 
 // Initialize an client library for a given user.
 // This only needs to be done *once* per user
 func ExampleTwitterApi_InitializeClient() {
-	anaconda.SetConsumerKey("your-consumer-key")
-	anaconda.SetConsumerSecret("your-consumer-secret")
-	api := anaconda.NewTwitterApi(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+	twitterapi.SetConsumerKey("your-consumer-key")
+	twitterapi.SetConsumerSecret("your-consumer-secret")
+	api := twitterapi.NewTwitterApi(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 	fmt.Println(*api.Credentials)
 }
 
 func ExampleTwitterApi_GetSearch() {
 
-	anaconda.SetConsumerKey("your-consumer-key")
-	anaconda.SetConsumerSecret("your-consumer-secret")
-	api := anaconda.NewTwitterApi("your-access-token", "your-access-token-secret")
+	twitterapi.SetConsumerKey("your-consumer-key")
+	twitterapi.SetConsumerSecret("your-consumer-secret")
+	api := twitterapi.NewTwitterApi("your-access-token", "your-access-token-secret")
 	search_result, err := api.GetSearch("golang", nil)
 	if err != nil {
 		panic(err)
@@ -32,13 +32,13 @@ func ExampleTwitterApi_GetSearch() {
 
 // Throttling queries can easily be handled in the background, automatically
 func ExampleTwitterApi_Throttling() {
-	api := anaconda.NewTwitterApi("your-access-token", "your-access-token-secret")
+	api := twitterapi.NewTwitterApi("your-access-token", "your-access-token-secret")
 	api.EnableThrottling(10*time.Second, 5)
 
 	// These queries will execute in order
 	// with appropriate delays inserted only if necessary
 	golangTweets, err := api.GetSearch("golang", nil)
-	anacondaTweets, err2 := api.GetSearch("anaconda", nil)
+	twitterapiTweets, err2 := api.GetSearch("twitterapi", nil)
 
 	if err != nil {
 		panic(err)
@@ -48,7 +48,7 @@ func ExampleTwitterApi_Throttling() {
 	}
 
 	fmt.Println(golangTweets)
-	fmt.Println(anacondaTweets)
+	fmt.Println(twitterapiTweets)
 }
 
 // Fetch a list of all followers without any need for managing cursors

@@ -1,4 +1,4 @@
-package anaconda
+package twitterapi
 
 type ListResponse struct {
 	PreviousCursor int    `json:"previous_cursor"`

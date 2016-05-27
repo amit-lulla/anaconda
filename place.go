@@ -1,4 +1,4 @@
-package anaconda
+package twitterapi
 
 type Place struct {
 	Attributes  map[string]string `json:"attributes"`

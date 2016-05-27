@@ -1,4 +1,4 @@
-package anaconda
+package twitterapi
 
 type UrlEntity struct {
 	Urls []struct {

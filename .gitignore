@@ -3,4 +3,4 @@
 *.swn
 conf.sh
 *.patch
-anaconda.test
+twitterapi.test

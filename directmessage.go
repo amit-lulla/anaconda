@@ -1,4 +1,4 @@
-package anaconda
+package twitterapi
 
 type DirectMessage struct {
 	CreatedAt           string   `json:"created_at"`

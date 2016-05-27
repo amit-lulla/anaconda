@@ -1,4 +1,4 @@
-package anaconda
+package twitterapi
 
 type User struct {
 	ContributorsEnabled            bool     `json:"contributors_enabled"`

@@ -1,4 +1,4 @@
-package anaconda_test
+package twitterapi_test
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ChimeraCoder/anaconda"
+	"github.com/amit-lulla/twitterapi"
 )
 
 var CONSUMER_KEY = os.Getenv("CONSUMER_KEY")
@@ -23,15 +23,15 @@ var CONSUMER_SECRET = os.Getenv("CONSUMER_SECRET")
 var ACCESS_TOKEN = os.Getenv("ACCESS_TOKEN")
 var ACCESS_TOKEN_SECRET = os.Getenv("ACCESS_TOKEN_SECRET")
 
-var api *anaconda.TwitterApi
+var api *twitterapi.TwitterApi
 
 var testBase string
 
 func init() {
 	// Initialize api so it can be used even when invidual tests are run in isolation
-	anaconda.SetConsumerKey(CONSUMER_KEY)
-	anaconda.SetConsumerSecret(CONSUMER_SECRET)
-	api = anaconda.NewTwitterApi(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+	twitterapi.SetConsumerKey(CONSUMER_KEY)
+	twitterapi.SetConsumerSecret(CONSUMER_SECRET)
+	api = twitterapi.NewTwitterApi(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
 	if CONSUMER_KEY != "" && CONSUMER_SECRET != "" && ACCESS_TOKEN != "" && ACCESS_TOKEN_SECRET != "" {
 		return
@@ -112,9 +112,9 @@ func Test_TwitterCredentials(t *testing.T) {
 
 // Test that creating a TwitterApi client creates a client with non-empty OAuth credentials
 func Test_TwitterApi_NewTwitterApi(t *testing.T) {
-	anaconda.SetConsumerKey(CONSUMER_KEY)
-	anaconda.SetConsumerSecret(CONSUMER_SECRET)
-	apiLocal := anaconda.NewTwitterApi(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+	twitterapi.SetConsumerKey(CONSUMER_KEY)
+	twitterapi.SetConsumerSecret(CONSUMER_SECRET)
+	apiLocal := twitterapi.NewTwitterApi(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
 	if apiLocal.Credentials == nil {
 		t.Fatalf("Twitter Api client has empty (nil) credentials")
@@ -160,7 +160,7 @@ func Test_GetUser(t *testing.T) {
 
 	// If all attributes are equal to the zero value for that type,
 	// then the original value was not valid
-	if reflect.DeepEqual(users[0], anaconda.User{}) {
+	if reflect.DeepEqual(users[0], twitterapi.User{}) {
 		t.Fatalf("Received %#v", users[0])
 	}
 }
@@ -177,7 +177,7 @@ func Test_GetFavorites(t *testing.T) {
 		t.Fatalf("GetFavorites returned no favorites")
 	}
 
-	if reflect.DeepEqual(favorites[0], anaconda.Tweet{}) {
+	if reflect.DeepEqual(favorites[0], twitterapi.Tweet{}) {
 		t.Fatalf("GetFavorites returned %d favorites and the first one was empty", len(favorites))
 	}
 }
@@ -198,7 +198,7 @@ func Test_GetTweet(t *testing.T) {
 	}
 
 	// Check the entities
-	expectedEntities := anaconda.Entities{Hashtags: []struct {
+	expectedEntities := twitterapi.Entities{Hashtags: []struct {
 		Indices []int
 		Text    string
 	}{struct {
@@ -215,7 +215,7 @@ func Test_GetTweet(t *testing.T) {
 		Screen_name string
 		Id          int64
 		Id_str      string
-	}{}, Media: []anaconda.EntityMedia{anaconda.EntityMedia{
+	}{}, Media: []twitterapi.EntityMedia{twitterapi.EntityMedia{
 		Id:              303777106628841472,
 		Id_str:          "303777106628841472",
 		Media_url:       "http://pbs.twimg.com/media/BDc7q0OCEAAoe2C.jpg",
@@ -223,16 +223,16 @@ func Test_GetTweet(t *testing.T) {
 		Url:             "http://t.co/eSq3ROwu",
 		Display_url:     "pic.twitter.com/eSq3ROwu",
 		Expanded_url:    "http://twitter.com/golang/status/303777106620452864/photo/1",
-		Sizes: anaconda.MediaSizes{Medium: anaconda.MediaSize{W: 600,
+		Sizes: twitterapi.MediaSizes{Medium: twitterapi.MediaSize{W: 600,
 			H:      450,
 			Resize: "fit"},
-			Thumb: anaconda.MediaSize{W: 150,
+			Thumb: twitterapi.MediaSize{W: 150,
 				H:      150,
 				Resize: "crop"},
-			Small: anaconda.MediaSize{W: 340,
+			Small: twitterapi.MediaSize{W: 340,
 				H:      255,
 				Resize: "fit"},
-			Large: anaconda.MediaSize{W: 1024,
+			Large: twitterapi.MediaSize{W: 1024,
 				H:      768,
 				Resize: "fit"}},
 		Type: "photo",
@@ -315,7 +315,7 @@ func Test_TwitterApi_SetDelay(t *testing.T) {
 
 	delay := api.GetDelay()
 	if delay != OLD_DELAY {
-		t.Fatalf("Expected initial delay to be the default delay (%s)", anaconda.DEFAULT_DELAY.String())
+		t.Fatalf("Expected initial delay to be the default delay (%s)", twitterapi.DEFAULT_DELAY.String())
 	}
 
 	api.SetDelay(NEW_DELAY)
@@ -335,23 +335,23 @@ func Test_TwitterApi_TwitterErrorDoesNotExist(t *testing.T) {
 		t.Fatalf("Expected an error when fetching tweet with id %d but got none - tweet object is %+v", DELETED_TWEET_ID, tweet)
 	}
 
-	apiErr, ok := err.(*anaconda.ApiError)
+	apiErr, ok := err.(*twitterapi.ApiError)
 	if !ok {
-		t.Fatalf("Expected an *anaconda.ApiError, and received error message %s, (%+v)", err.Error(), err)
+		t.Fatalf("Expected an *twitterapi.ApiError, and received error message %s, (%+v)", err.Error(), err)
 	}
 
-	terr, ok := apiErr.Decoded.First().(anaconda.TwitterError)
+	terr, ok := apiErr.Decoded.First().(twitterapi.TwitterError)
 
 	if !ok {
 		t.Fatalf("TwitterErrorResponse.First() should return value of type TwitterError, not %s", reflect.TypeOf(apiErr.Decoded.First()))
 	}
 
-	if code := terr.Code; code != anaconda.TwitterErrorDoesNotExist && code != anaconda.TwitterErrorDoesNotExist2 {
-		if code == anaconda.TwitterErrorRateLimitExceeded {
-			t.Fatalf("Rate limit exceeded during testing - received error code %d instead of %d", anaconda.TwitterErrorRateLimitExceeded, anaconda.TwitterErrorDoesNotExist)
+	if code := terr.Code; code != twitterapi.TwitterErrorDoesNotExist && code != twitterapi.TwitterErrorDoesNotExist2 {
+		if code == twitterapi.TwitterErrorRateLimitExceeded {
+			t.Fatalf("Rate limit exceeded during testing - received error code %d instead of %d", twitterapi.TwitterErrorRateLimitExceeded, twitterapi.TwitterErrorDoesNotExist)
 		} else {
 
-			t.Fatalf("Expected Twitter to return error code %d, and instead received error code %d", anaconda.TwitterErrorDoesNotExist, code)
+			t.Fatalf("Expected Twitter to return error code %d, and instead received error code %d", twitterapi.TwitterErrorDoesNotExist, code)
 		}
 	}
 }
@@ -369,7 +369,7 @@ func Test_TwitterApi_Throttling(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GetSearch yielded error %s", err.Error())
 	}
-	_, err = api.GetSearch("anaconda", nil)
+	_, err = api.GetSearch("twitterapi", nil)
 	if err != nil {
 		t.Fatalf("GetSearch yielded error %s", err.Error())
 	}
@@ -388,7 +388,7 @@ func Test_DMScreenName(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	_, err = api.PostDMToScreenName("Test the anaconda lib", to.ScreenName)
+	_, err = api.PostDMToScreenName("Test the twitterapi lib", to.ScreenName)
 	if err != nil {
 		t.Error(err)
 		return
